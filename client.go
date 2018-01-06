@@ -60,8 +60,6 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 
 	cmd := shellquote.Join("scp", "-t", directory)
 
-	fmt.Printf("cmd: %s\n", cmd)
-
 	if err := a.Session.Start(cmd); err != nil {
 		w.Close()
 		return err
