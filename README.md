@@ -1,6 +1,6 @@
 Copy files over SCP with Go
 =============================
-[![](https://godoc.org/github.com/bramvdbogaerde/go-scp?status.svg)](https://godoc.org/github.com/bramvdbogaerde/go-scp)
+[![](https://godoc.org/github.com/EchoBroadband/go-scp?status.svg)](https://godoc.org/github.com/EchoBroadband/go-scp)
 
 This package makes it very easy to copy files over scp in Go.
 It uses the golang.org/x/crypto/ssh package to establish a secure connection to a remote server in order to copy the files via the SCP protocol.
@@ -13,8 +13,8 @@ package main
 import(
 	"fmt"
 	"os"
-	"github.com/bramvdbogaerde/go-scp/auth"
-	"github.com/bramvdbogaerde/go-scp"
+	"github.com/EchoBroadband/go-scp/auth"
+	"github.com/EchoBroadband/go-scp"
         "golang.org/x/crypto/ssh"
 )
 
@@ -47,6 +47,10 @@ func main(){
 	// Finaly, copy the file over
 	// Usage: CopyFile(fileReader, remotePath, permission)
 
-	client.CopyFile(f, "/path/to/remote/file", "0655")
+	err = client.CopyFile(f, "/path/to/remote/file", "0655")
+
+	if err != nil {
+		fmt.Println("Error", err)
+	}
 }
 ```
