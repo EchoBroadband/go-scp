@@ -70,7 +70,7 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 
 	cmd := sq.Join("scp", "-t", directory)
 
-	if err := a.Session.Start(cmd); err != nil {
+	if err := session.Start(cmd); err != nil {
 		w.Close()
 		return err
 	}
@@ -78,7 +78,7 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 	errors := make(chan error)
 
 	go func() {
-		errors <- a.Session.Wait()
+		errors <- session.Wait()
 	}()
 
 	fmt.Fprintln(w, "C"+permissions, size, filename)
