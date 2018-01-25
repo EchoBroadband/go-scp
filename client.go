@@ -9,7 +9,7 @@ import (
 	"os"
 	"path"
 
-	shellquote "github.com/kballard/go-shellquote"
+	sq "github.com/kballard/go-shellquote"
 )
 
 type Client struct {
@@ -35,7 +35,7 @@ func (a *Client) Connect() error {
 	return nil
 }
 
-func (a *Client) Close() error {
+func (a *Client) Close() {
 	if a.Session != nil {
 		a.Session.Close()
 	}
@@ -71,7 +71,7 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 		return err
 	}
 
-	cmd := shellquote.Join("scp", "-t", directory)
+	cmd := sq.Join("scp", "-t", directory)
 
 	if err := a.Session.Start(cmd); err != nil {
 		w.Close()
