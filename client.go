@@ -56,10 +56,11 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 	filename := path.Base(remotePath)
 	directory := path.Dir(remotePath)
 
-	session, err : a.client.NewSession()
+	session, err := a.client.NewSession()
 	if err != nil {
 		return err
 	}
+	defer session.Close()
 
 	w, err := session.StdinPipe()
 
