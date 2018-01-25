@@ -15,7 +15,6 @@ import (
 type Client struct {
 	Host         string
 	ClientConfig *ssh.ClientConfig
-	Session      *ssh.Session
 	client       *ssh.Client
 }
 
@@ -28,18 +27,10 @@ func (a *Client) Connect() error {
 		return err
 	}
 
-	a.Session, err = a.client.NewSession()
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
 func (a *Client) Close() {
-	if a.Session != nil {
-		a.Session.Close()
-	}
-
 	if a.client != nil {
 		a.client.Conn.Close()
 	}
@@ -65,7 +56,12 @@ func (a *Client) Copy(r io.Reader, remotePath string, permissions string, size i
 	filename := path.Base(remotePath)
 	directory := path.Dir(remotePath)
 
-	w, err := a.Session.StdinPipe()
+	session, err : a.client.NewSession()
+	if err != nil {
+		return err
+	}
+
+	w, err := session.StdinPipe()
 
 	if err != nil {
 		return err
