@@ -16,20 +16,31 @@ type Client struct {
 	Host         string
 	ClientConfig *ssh.ClientConfig
 	Session      *ssh.Session
+	client       *ssh.Client
 }
 
 // Connects to the remote SSH server, returns error if it couldn't establish a session to the SSH server
 func (a *Client) Connect() error {
-	client, err := ssh.Dial("tcp", a.Host, a.ClientConfig)
+	a.client, err := ssh.Dial("tcp", a.Host, a.ClientConfig)
 	if err != nil {
 		return err
 	}
 
-	a.Session, err = client.NewSession()
+	a.Session, err = a.client.NewSession()
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (a *Client) Close() error {
+	if a.Session != nil {
+		a.Session.Close()
+	}
+
+	if a.client != nil {
+		a.client.Conn.Close()
+	}
 }
 
 //Copies the contents of an os.File to a remote location, it will get the length of the file by looking it up from the filesystem
